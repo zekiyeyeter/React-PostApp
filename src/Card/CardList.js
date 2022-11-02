@@ -24,7 +24,7 @@ export default function CardList() {
 
   useEffect(() => {
     refreshPosts();
-  }, [posts]);
+  }, []);
 
   const container = {
     display: "flex",
@@ -36,23 +36,21 @@ export default function CardList() {
 
   return (
     <div style={container}>
-      <CardForm userName={"Abdullah"} userId={5} refreshPosts={refreshPosts} />
-      {/*  {localStorage.getItem("currentUser") == null ? (
-        ""
-      ) : (
+      
+        {localStorage.getItem("currentUser") == null ? "": 
         <CardForm
-          userName={localStorage.getItem("currentUser ")}
-          userId={localStorage.getItem("userId")}
+          userName={localStorage.getItem("userName")}
+          userId={localStorage.getItem("currentUser")}
           refreshPosts={refreshPosts}
         />
-      )}
- */}
+      }
+ 
       {posts.map((post,i) => (
         <Cart key={i}
           likes={post.likes}
           postId={post.id}
           userId={post.userId}
-          userName={"wdfgh"}
+          userName={post.userName}
           title={post.title}
           text={post.text}
         ></Cart>

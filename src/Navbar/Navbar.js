@@ -5,14 +5,9 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import { red, indigo } from "@mui/material/colors";
-import { createTheme } from "@mui/material/styles";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
+import { red, indigo, grey } from "@mui/material/colors";
+import LockOpen from "@mui/icons-material/LockOpen";
 
-
-
-const colornn = indigo[900];
 export default function Navbar() {
   const navigate = useNavigate();
 
@@ -21,12 +16,20 @@ export default function Navbar() {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("refreshKey");
     localStorage.removeItem("userName");
-    navigate(-1);
+    navigate("/");
   };
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" style={{backgroundColor:'red'}}>
+        <AppBar
+          position="static"
+          sx={{
+            bgcolor: grey[800],
+            textDecoration: "none",
+            boxShadow: "none",
+            color: "white",
+          }}
+        >
           <Toolbar>
             <IconButton
               size="large"
@@ -34,9 +37,7 @@ export default function Navbar() {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 1 }}
-            >
-            
-            </IconButton>
+            ></IconButton>
             <Typography
               color="white"
               variant="h6"
@@ -55,30 +56,29 @@ export default function Navbar() {
                 Home
               </Link>
             </Typography>
-
-            {localStorage.getItem("currentUser") == null ? (
-              <Link
-                style={{ color: "white", textDecoration: "none" }}
-                to="/auth"
-              >
-                Login/Register
-              </Link>
-            ) : (
-              <div>
-                <IconButton
-                  style={{ color: "white", textDecoration: "none" }}
-                  onClick={onClick}
-                >
-                  <LockOpenIcon></LockOpenIcon>
-                </IconButton>
-                <Link
-                  style={{ color: "white", textDecoration: "none" }}
-                  to={{pathname: "/users/" + localStorage.getItem("currentUser"),}}
-                >
-                  Profile
-                </Link>
-              </div>
-            )}
+            <Typography variant="h6">
+              {localStorage.getItem("currentUser") == null ? (
+                <Link to="/auth">Login/Register</Link>
+              ) : (
+                <div>
+                  <IconButton
+                    style={{ color: "white", textDecoration: "none" }}
+                    onClick={onClick}
+                  >
+                    <LockOpen></LockOpen>
+                  </IconButton>
+                  <Link
+                    style={{ color: "white", textDecoration: "none" }}
+                    to={{
+                      pathname: "/users/" + localStorage.getItem("currentUser"),
+                    }}
+                  >
+                    {" "}
+                    Profile
+                  </Link>
+                </div>
+              )}{" "}
+            </Typography>
           </Toolbar>
         </AppBar>
       </Box>

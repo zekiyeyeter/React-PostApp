@@ -9,29 +9,13 @@ import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Stack from '@mui/material/Stack';
-import { red,deepOrange, deepPurple,indigo  } from "@mui/material/colors";
+import { red, deepOrange, deepPurple, indigo } from "@mui/material/colors";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { Button, InputAdornment } from "@mui/material";
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
-const theme = createTheme({
-  status: {
-    danger: '#e53e3e',
-  },
-  palette: {
-    primary: {
-      main: '#0971f1',
-      darker: '#053e85',
-    },
-    neutral: {
-      main: '#64748B',
-      contrastText: '#fff',
-    },
-  },
-});
-const colorNavbar= indigo[900]
 
+const colorNavbar = indigo[900];
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -48,17 +32,19 @@ export default function CardForm(props) {
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
   const [isSent, setIsSent] = useState(false); // post isteği gönderdik mi
- 
+
   const savePost = () => {
+    console.log(localStorage.getItem("tokenKey"));
     fetch("/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+       "Authorization": localStorage.getItem("tokenKey"),
       },
       body: JSON.stringify({
         title: title,
         text: text,
-        userId: userId,
+        userId: localStorage.getItem("currentUser"),
       }),
     })
       .then((res) => res.json())
@@ -66,6 +52,8 @@ export default function CardForm(props) {
   };
 
   const handleSubmit = () => {
+    console.log(localStorage.getItem("tokenKey"));
+
     savePost();
     setIsSent(true);
     setTitle("");
@@ -82,19 +70,19 @@ export default function CardForm(props) {
   };
 
   return (
-    <Card sx={{ width: 800, margin: 4, textAlign: "left",}}>
+    <Card sx={{ width: 800, margin: 4, textAlign: "left" }}>
       <CardHeader
         avatar={
           <Link to={{ pathname: "/users/" + userId }}>
             <Avatar
               sx={{
                 bgcolor: red[700],
-                color:"white",
+                color: "white",
                 textDecoration: "none",
               }}
               aria-label="recipe"
             >
-              {userName.charAt(0).toUpperCase()}
+              {/* {userName.charAt(0).toUpperCase()} */}
             </Avatar>
           </Link>
         }
@@ -104,9 +92,9 @@ export default function CardForm(props) {
             variant="outlined"
             multiline
             colorSecondary
-            backgroundColor ="black"
+            backgroundColor="black"
             placaholder="Title"
-            inputProps={ {maxLength: 50} }
+            inputProps={{ maxLength: 50 }}
             fullWidth
             value={title}
             onChange={(i) => handleTitle(i.target.value)}
@@ -121,7 +109,6 @@ export default function CardForm(props) {
               variant="standard"
               multiline
               inputProps={{ maxLength: 500 }}
-              
               fullWidth
               value={text}
               onChange={(i) => handleText(i.target.value)}
@@ -131,7 +118,7 @@ export default function CardForm(props) {
                     onClick={handleSubmit}
                     sx={{
                       bgcolor: red[900],
-                      color:"white",
+                      color: "white",
                       textDecoration: "none",
                     }}
                     variant="contained"

@@ -11,10 +11,11 @@ import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red,indigo } from "@mui/material/colors";
+import { red, indigo } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ModeCommentIcon from "@mui/icons-material/ModeComment";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { PostWithAuth } from "../services/Http.Service";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -34,13 +35,15 @@ export default function Cart(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [commentList, setCommentList] = useState([]);
   const isInitialMount = useRef(true);
-  const [likeCount, setLikeCount] = useState(likes.length||0);
+  const [likeCount, setLikeCount] = useState(likes.length || 0);
   const [likeId, setLikeId] = useState(null);
-  const colorNavbar= indigo[900]
+  const [refresh, setRefresh] = useState(false);
+  let disabled = localStorage.getItem("currentUser") == null ? true : false;
 
+  const setCommentRefresh = () => {
+    setRefresh(true);
+  };
 
-
-  let disabled =localStorage.getItem("currentUser")== null ? true:false;  
   const handleExpandClick = () => {
     setExpanded(!expanded);
     refreshComments();
@@ -69,18 +72,21 @@ export default function Cart(props) {
           setError(error);
         }
       );
+    setRefresh(false);
   };
 
   const saveLike = () => {
     fetch("/likes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        postId: postId,
-        userId: userId,
-      }),
+       method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        
+           body : JSON.stringify({
+          postId: postId,
+          userId: localStorage.getItem("currentUser"),
+      })
+      
     })
       .then((res) => res.json())
       .catch((err) => console.log("error"));
@@ -89,11 +95,14 @@ export default function Cart(props) {
   const deleteLike = () => {
     fetch("/likes/" + likeId, {
       method: "DELETE",
+      Authorization: localStorage.getItem("tokenKey"),
     }).catch((err) => console.log("error"));
   };
 
   const checkLiked = () => {
-    var likeControl = likes.find((like) => like.userId === userId);
+    var likeControl = likes.find(
+      (like) => like.userId === localStorage.getItem("currentUser")
+    );
     if (likeControl != null) {
       setLikeId(likeControl.id);
       setLiked(true);
@@ -102,7 +111,7 @@ export default function Cart(props) {
   useEffect(() => {
     if (isInitialMount.current) isInitialMount.current = false;
     else refreshComments();
-  }, [commentList]);
+  }, [refresh]);
   useEffect(() => {
     checkLiked();
   }, []);
@@ -132,9 +141,20 @@ export default function Cart(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton disabled onClick={handleLike} aria-label="add to favorites">
-          <FavoriteIcon style={liked ? {color: "red" } : null} />
-        </IconButton>
+        {disabled ? (
+          <IconButton
+            disabled
+            onClick={handleLike}
+            aria-label="add to favorites"
+          >
+            <FavoriteIcon style={liked ? { color: "red" } : null} />
+          </IconButton>
+        ) : (
+          <IconButton onClick={handleLike} aria-label="add to favorites">
+            <FavoriteIcon style={liked ? { color: "red" } : null} />
+          </IconButton>
+        )}
+
         {likeCount}
         <ExpandMore
           expand={expanded}
@@ -150,10 +170,11 @@ export default function Cart(props) {
           {error
             ? "error"
             : isLoaded
-            ? commentList.map((comment,i) => (
-                <Comment key={i}
-                  userId={1}
-                  userName={"USER"}
+            ? commentList.map((comment, i) => (
+                <Comment
+                  key={i}
+                  userId={comment.userId}
+                  userName={comment.userName}
                   text={comment.text}
                 ></Comment>
               ))
@@ -162,9 +183,10 @@ export default function Cart(props) {
             ""
           ) : (
             <CommentForm
-              userId={1}
-              username={"USER"}
+              userId={localStorage.getItem("userId")}
+              userName={localStorage.getItem("currentUser")}
               postId={postId}
+              setCommentRefresh={setCommentRefresh}
             ></CommentForm>
           )}
         </CardContent>

@@ -5,13 +5,15 @@ import {
   Button,
   FormHelperText,
 } from "@mui/material";
-import { red,indigo } from "@mui/material/colors";
+import { red, indigo } from "@mui/material/colors";
 import React, { useState } from "react";
 import "./Auth.css";
+import { useNavigate } from "react-router-dom";
 
 function Auth() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleUsername = (value) => {
     setUsername(value);
@@ -46,12 +48,16 @@ function Auth() {
     sendRequest(path);
     setUsername("");
     setPassword("");
+
+    
+      navigate("/");
+    
     console.log(localStorage);
   };
 
   return (
     <div className="container">
-      <FormControl style={{ margin: 30 }}>
+      <FormControl style={{ margin: 20 }}>
         <InputLabel> Username </InputLabel>
         <Input
           id="my-input2"
@@ -59,12 +65,11 @@ function Auth() {
         />
 
         <FormControl>
-          <InputLabel style={{ touchAction: "-ms-manipulation" }}>
-            {" "}
-            Password{" "}
-          </InputLabel>
+          <InputLabel style={{ top: 11 }}>Password</InputLabel>
           <Input
-            id="my-input"
+            id="outlined-password-input"
+            type="password"
+            style={{ top: 10 }}
             onChange={(i) => handlePassword(i.target.value)}
           ></Input>
         </FormControl>
@@ -74,9 +79,9 @@ function Auth() {
           variant="contained"
           sx={{
             bgcolor: red[900],
-            color:"white",
+            color: "white",
             textDecoration: "none",
-            marginTop:5
+            marginTop: 7,
           }}
         >
           Register
@@ -90,7 +95,7 @@ function Auth() {
           variant="contained"
           sx={{
             bgcolor: red[900],
-            color:"white",
+            color: "white",
             textDecoration: "none",
           }}
         >
