@@ -87,7 +87,7 @@ function CommentForm(props) {
         onChange={(i) => handleChange(i.target.value)}
         startAdornment={
           <InputAdornment position="start">
-            <Link to={{ pathname: "/users" + userId }}>
+            <Link to={{ pathname: "/users/" + userId }}>
               <Avatar
                 sx={{
                   bgcolor: red[500],

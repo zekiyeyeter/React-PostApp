@@ -14,6 +14,7 @@ export default function CardList() {
             .then(res => res.json())
             .then(
                 (result) => {
+                    console.log(result)
                     setIsLoaded(true);
                     setPosts(result.reverse());
                 },
@@ -54,7 +55,7 @@ export default function CardList() {
                     <Cart key={i}
                           likes={post.likes}
                           postId={post.id}
-                          userId={post.userId}
+                          userId={post.user.id}
                           userName={post.userName}
                           title={post.title}
                           text={post.text}
