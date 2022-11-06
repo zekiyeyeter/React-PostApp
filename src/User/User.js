@@ -16,7 +16,7 @@ function User() {
     "Authorization": localStorage.getItem("tokenKey"),
    },
 })
-      .then((res) => res.json())
+      .then(res => res.json())
       .then(
         (result) => {
           console.log(result);
@@ -30,7 +30,7 @@ function User() {
 
   useEffect(() => {
     getUser();
-  }, []);
+  },[] );
 
   return (
     <div style={{ display: "flex" }}>

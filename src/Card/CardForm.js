@@ -1,37 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 
 import Card from "@mui/material/Card";
-import { styled, withTheme } from "@mui/material/styles";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red, deepOrange, deepPurple, indigo } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { Button, InputAdornment } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
 
 
-const colorNavbar = indigo[900];
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+
 
 export default function CardForm(props) {
-  const { userId, userName, refreshPosts } = props;
+  const { userId, refreshPosts } = props;
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
-  const [isSent, setIsSent] = useState(false); // post isteği gönderdik mi
+  const [isSent ,setIsSent] = useState(false); // post isteği gönderdik mi
 
   const savePost = () => {
     console.log(localStorage.getItem("tokenKey"));
@@ -48,12 +36,13 @@ export default function CardForm(props) {
       }),
     })
       .then((res) => res.json())
-      .catch((err) => console.log("error"));
+      .catch((err) => console.log(err));
   };
 
-  const handleSubmit = () => {
-    console.log(localStorage.getItem("tokenKey"));
 
+
+
+  const handleSubmit = () => {
     savePost();
     setIsSent(true);
     setTitle("");
@@ -91,7 +80,6 @@ export default function CardForm(props) {
             id="outlined-adornment-amount"
             variant="outlined"
             multiline
-            colorSecondary
             backgroundColor="black"
             placaholder="Title"
             inputProps={{ maxLength: 50 }}

@@ -28,7 +28,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Cart(props) {
-  const { title, text, userId, postId, likes } = props;
+  const { title, text, userId, postId, likes, userName } = props;
   const [expanded, setExpanded] = React.useState(false);
   const [liked, setLiked] = React.useState(false);
   const [error, setError] = useState(null);
@@ -77,16 +77,16 @@ export default function Cart(props) {
 
   const saveLike = () => {
     fetch("/likes", {
-       method: "POST", 
-        headers: {
-          "Content-Type": "application/json",
-        },
-        
-           body : JSON.stringify({
-          postId: postId,
-          userId: localStorage.getItem("currentUser"),
-      })
-      
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("tokenKey"),
+      },
+
+      body: JSON.stringify({
+        postId: postId,
+        userId: localStorage.getItem("currentUser"),
+      }),
     })
       .then((res) => res.json())
       .catch((err) => console.log("error"));
@@ -95,8 +95,11 @@ export default function Cart(props) {
   const deleteLike = () => {
     fetch("/likes/" + likeId, {
       method: "DELETE",
-      Authorization: localStorage.getItem("tokenKey"),
-    }).catch((err) => console.log("error"));
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("tokenKey"),
+      },
+    }).catch((err) => console.log(err));
   };
 
   const checkLiked = () => {
@@ -120,7 +123,7 @@ export default function Cart(props) {
     <Card sx={{ width: 800, margin: 4, textAlign: "left" }}>
       <CardHeader
         avatar={
-          <Link to={{ pathname: "/users" + userId }}>
+          <Link to={{ pathname: "/users/" + userId }}>
             <Avatar
               sx={{
                 bgcolor: red[700],
@@ -129,14 +132,19 @@ export default function Cart(props) {
                 color: "white",
               }}
               aria-label="recipe"
-            ></Avatar>
+            >
+            </Avatar>
           </Link>
         }
         title={title}
       />
 
       <CardContent>
-        <Typography variant="body2" color="text.secondary" backgroundColor="">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          backgroundColor="white"
+        >
           {text}
         </Typography>
       </CardContent>
@@ -183,8 +191,8 @@ export default function Cart(props) {
             ""
           ) : (
             <CommentForm
-              userId={localStorage.getItem("userId")}
-              userName={localStorage.getItem("currentUser")}
+              userId={localStorage.getItem("currentUser")}
+              userName={localStorage.getItem("userName")}
               postId={postId}
               setCommentRefresh={setCommentRefresh}
             ></CommentForm>

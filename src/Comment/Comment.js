@@ -3,9 +3,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
+import User from "../User/User";
 
 function Comment(props) {
   const { text, userId, userName } = props;
+
 
   return (
     <CardContent>
@@ -18,15 +20,16 @@ function Comment(props) {
         value={text}
         startAdornment={
           <InputAdornment position="start">
-            <Link to={{ pathname: "/users" + userId }}>
+            <Link to={{ pathname: "/users/" + userId }}>
               <Avatar
                 sx={{
                   bgcolor: red[500],
                   textDecoration: "none",
                 }}
+                
                 aria-label="recipe"
               >
-                {userName.charAt(0).toUpperCase()}
+                 {userName.charAt(0).toUpperCase()} 
               </Avatar>
             </Link>
           </InputAdornment>

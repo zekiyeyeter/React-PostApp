@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,14 +9,14 @@ import { red, indigo, grey } from "@mui/material/colors";
 import LockOpen from "@mui/icons-material/LockOpen";
 
 export default function Navbar() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
   const onClick = () => {
     localStorage.removeItem("tokenKey");
     localStorage.removeItem("currentUser");
     localStorage.removeItem("refreshKey");
     localStorage.removeItem("userName");
-    navigate("/");
+    navigate(0)
   };
   return (
     <div>
@@ -57,7 +57,10 @@ export default function Navbar() {
               </Link>
             </Typography>
             <Typography variant="h6">
-              {localStorage.getItem("currentUser") == null ? (
+              {
+
+
+                  localStorage.getItem("currentUser") == null ? (
                 <Link to="/auth">Login/Register</Link>
               ) : (
                 <div>

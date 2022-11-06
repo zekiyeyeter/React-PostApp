@@ -28,8 +28,13 @@ function PopUp(props) {
   const [post, setPost] = useState();
 
   const getPost = () => {
-    fetch("/posts/" + postId)
-      .then((res) => res.json())
+    fetch("/posts/" + postId,{
+      headers:{
+        "Content-Type": "application/json",
+        "Authorization" : localStorage.getItem("tokenKey"),
+      }
+    })
+      .then(res => res.json())
       .then(
         (result) => {
           console.log(result);
@@ -113,7 +118,7 @@ function UserActivity(props) {
         "Authorization": localStorage.getItem("tokenKey"),
       },
     })
-      .then((res) => res.json())
+      .then(res=> res.json())
       .then(
         (result) => {
           setIsLoaded(true);

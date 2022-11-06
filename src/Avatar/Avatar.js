@@ -11,7 +11,6 @@ import Modal from "@mui/material/Modal";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { ListItemSecondaryAction, Radio } from "@mui/material";
-import { PutWithAuth } from "../services/Http.Service";
 
 const style = {
   position: "absolute",
@@ -32,7 +31,7 @@ export default function Avatar(props) {
 
   const saveAvatar = () => {
     fetch("/users/"+localStorage.getItem("currentUser"),{
-  
+
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -66,22 +65,26 @@ export default function Avatar(props) {
         <CardMedia
           component="img"
           image={`/avatars/avatar${selectedValue}.png`}
-          alt="User Avatar"
+          alt="User Avatar" 
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            userName
+            {userName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             User info
           </Typography>
         </CardContent>
-        <CardActions>
-        {localStorage.getItem("currentUser") == userId ? <Button size="small" color="primary"  onClick={handleOpen}>
+        <CardActions >
+        {localStorage.getItem("currentUser") === userId ? <Button size="small" color="primary"  onClick={handleOpen}>
           Change Avatar
         </Button> :""}
         </CardActions>
       </Card>
+
+      {
+
+      }
       <Modal
         open={open}
         onClose={handleClose}

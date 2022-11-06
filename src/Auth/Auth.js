@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import "./Auth.css";
 import { useNavigate } from "react-router-dom";
 
-function Auth() {
+function Auth(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ function Auth() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+
       },
       body: JSON.stringify({
         userName: username,
@@ -36,6 +37,8 @@ function Auth() {
     })
       .then((res) => res.json())
       .then((result) => {
+       console.log(result.accessToken)
+       console.log("asdasd")
         localStorage.setItem("tokenKey", result.accessToken);
         localStorage.setItem("refreshKey", result.refreshToken);
         localStorage.setItem("currentUser", result.userId);
@@ -45,14 +48,12 @@ function Auth() {
   };
 
   const handleButton = (path) => {
-    sendRequest(path);
+      console.log(props)
+      props.authHandler(username,password,path)
     setUsername("");
     setPassword("");
+    navigate("/")
 
-    
-      navigate("/");
-    
-    console.log(localStorage);
   };
 
   return (

@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
 import { useState } from "react";
-import {  RefreshToken } from "../services/Http.Service";
+import { RefreshToken } from "../services/Http.Service";
 
 function CommentForm(props) {
   const { userId, userName, postId, setCommentRefresh } = props;
@@ -32,9 +32,14 @@ function CommentForm(props) {
         "Content-Type": "application/json",
         Authorization: localStorage.getItem("tokenKey"),
       },
-      body: JSON.stringify({ postId: postId, userId: userId, text: text }),
+      body: JSON.stringify({
+        postId: postId,
+        userId: localStorage.getItem("currentUser"),
+        text: text,
+      }),
     })
       .then((res) => {
+        console.log(res);
         if (!res.ok) {
           RefreshToken()
             .then((res) => {
@@ -47,7 +52,7 @@ function CommentForm(props) {
             .then((result) => {
               console.log(result);
 
-              if (result != undefined) {
+              if (result !== undefined) {
                 localStorage.setItem("tokenKey", result.accessToken);
                 saveComment();
                 setCommentRefresh();
@@ -90,7 +95,7 @@ function CommentForm(props) {
                 }}
                 aria-label="recipe"
               >
-                {userName.charAt(0).toUpperCase()}
+                {userName.charAt(0).toUpperCase()}{" "}
               </Avatar>
             </Link>
           </InputAdornment>
@@ -111,4 +116,5 @@ function CommentForm(props) {
     </CardContent>
   );
 }
+
 export default CommentForm;
